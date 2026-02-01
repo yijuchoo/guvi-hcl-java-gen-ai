@@ -6,6 +6,7 @@ out/
 .idea/
 *.iml
 *.iws
+*.ipr
 *.class
 
 ### Eclipse ###
@@ -17,8 +18,6 @@ out/
 .springBeans
 .sts4-cache
 bin/
-!**/src/main/**/bin/
-!**/src/test/**/bin/
 
 ### NetBeans ###
 /nbproject/private/
@@ -26,16 +25,21 @@ bin/
 /dist/
 /nbdist/
 /.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
 
 ### VS Code ###
 .vscode/
 
 # Maven
 target/
+.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/bin/
+!**/src/test/**/bin/
 
 # Gradle
 .build/
-build/
 .bin/
 
 # Gradle cache
@@ -55,3 +59,5 @@ replay_pid*
 *.local.properties
 
 my-reference/
+src/assessments/
+HELP.md
