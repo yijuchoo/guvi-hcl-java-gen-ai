@@ -1,11 +1,11 @@
 package com.guvi.spring_boot_intro.service;
 
 import java.util.Optional;
+
 import com.guvi.spring_boot_intro.dto.StudentPageResponseV2;
 import com.guvi.spring_boot_intro.exception.DuplicateEmailException;
 import com.guvi.spring_boot_intro.exception.StudentNotFoundException;
 import com.guvi.spring_boot_intro.model.Student;
-import com.guvi.spring_boot_intro.notify.Notifier;
 import com.guvi.spring_boot_intro.repo.StudentRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,11 +17,9 @@ import org.springframework.stereotype.Service;
 public class StudentService {
 
     private final StudentRepository repo;
-    private final Notifier notifier;
 
-    public StudentService(StudentRepository repo, Notifier notifier) {
+    public StudentService(StudentRepository repo) {
         this.repo = repo;
-        this.notifier = notifier;
     }
 
     public Student createStudent(String name, String email) {
@@ -32,8 +30,6 @@ public class StudentService {
 
         Student student = new Student(null, name, email, true);
         repo.save(student);
-
-        notifier.send(email, "Welcome " + name + "! Your id is " + student.getId());
 
         return student;
     }
@@ -67,9 +63,6 @@ public class StudentService {
     }
 
     public void deleteStudent(String id) {
-        //        Student student = repo.findById(id)
-        //            .orElseThrow( () -> new StudentNotFoundException(id));
-
         if (!repo.existsById(id)) {
             throw new StudentNotFoundException(id);
         }
@@ -77,38 +70,39 @@ public class StudentService {
     }
 
     public StudentPageResponseV2<Student> searchStudents(Boolean active, String search,
-                                                String sortBy, String sortDir,
-                                                Integer page, Integer size) {
+                                                         String sortBy, String sortDir,
+                                                         Integer page, Integer size) {
         int safePage = (page == null || page < 0) ? 0 : page;
-        int safeSize = (size == null || size < 0) ? 3 : size;
+        int safeSize = (size == null || size < 3) ? 3 : size;
 
         String effectiveSortBy = (sortBy == null || sortBy.isBlank()) ? "name" : sortBy;
         String effectiveSortDir = (sortDir == null || sortDir.isBlank()) ? "asc" : sortDir;
 
-        // What if sortBy = "abcd"
+        // what if sortBy = "abcd"
+        // what if sortBy is null?
         if (!effectiveSortBy.equalsIgnoreCase("name")
                 && !effectiveSortBy.equalsIgnoreCase("email")
                 && !effectiveSortBy.equalsIgnoreCase("active")) {
             throw new IllegalArgumentException("Unsupported sortBy: " + effectiveSortBy);
         }
 
-        Sort.Direction direction = effectiveSortDir.equalsIgnoreCase(
-                "desc") ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort.Direction direction = effectiveSortDir.equalsIgnoreCase("desc")
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
 
         Pageable pageable = PageRequest.of(safePage, safeSize, Sort.by(direction, effectiveSortBy));
         String keyword = (search == null) ? "" : search.trim();
 
         Page<Student> result;
-        /*
-        Conditions:
-        1) active & keyword: filter + search together
-        2) keyword only: Just search
-        3) active only: Just filter
-        4) no filters: plain list
+       /*
+       Conditions:
+           1) active & keyword: filter + search together
+           2) keyword only: just search
+           3) active only: just filter
+           4) no filters: plain list
         */
-
         if (active != null && !keyword.isBlank()) {
-            // key fields: name and email
+            // key fields we care about: name and email
             // we want to search + filter in a case-insensitive manner AND
             // handle partial searches
             result = repo.findByActiveAndNameContainingIgnoreCaseOrActiveAndEmailContainingIgnoreCase(

@@ -2,6 +2,8 @@ package com.guvi.spring_boot_intro.error;
 
 import java.util.Map;
 
+import com.guvi.spring_boot_intro.exception.CourseNotFoundException;
+import com.guvi.spring_boot_intro.exception.DuplicateCourseException;
 import com.guvi.spring_boot_intro.exception.DuplicateEmailException;
 import com.guvi.spring_boot_intro.exception.StudentNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -31,5 +33,19 @@ public class GlobalExceptionHandler {
             .status(HttpStatus.NOT_FOUND)
             .body( Map.of("message", ex.getMessage()));
 
+    }
+
+    @ExceptionHandler(CourseNotFoundException.class)
+    public ResponseEntity handleCourseNotFound(CourseNotFoundException ex){
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body( Map.of("message", ex.getMessage()));
+
+    }
+    @ExceptionHandler(DuplicateCourseException.class)
+    public ResponseEntity<Map<String, String>> handleDuplicateCourse(DuplicateCourseException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                Map.of("message", ex.getMessage())
+        );
     }
 }

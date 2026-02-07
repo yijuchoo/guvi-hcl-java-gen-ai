@@ -1,7 +1,13 @@
 package com.guvi.spring_boot_intro.bootstrap;
 
+import java.time.Instant;
 import java.util.List;
- import com.guvi.spring_boot_intro.model.Student;
+
+import com.guvi.spring_boot_intro.model.Course;
+import com.guvi.spring_boot_intro.model.Enrollment;
+import com.guvi.spring_boot_intro.model.Student;
+import com.guvi.spring_boot_intro.repo.CourseRepository;
+import com.guvi.spring_boot_intro.repo.EnrollmentRepository;
 import com.guvi.spring_boot_intro.repo.StudentRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -19,9 +25,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataSeeder implements CommandLineRunner {
     private final StudentRepository repo;
+    private final CourseRepository courseRepo;
+    private final EnrollmentRepository enrollRepo;
 
-    public DataSeeder(StudentRepository repo) {
+    public DataSeeder(StudentRepository repo, CourseRepository courseRepo,
+                      EnrollmentRepository enrollRepo) {
         this.repo = repo;
+        this.courseRepo = courseRepo;
+        this.enrollRepo = enrollRepo;
     }
 
     @Override
@@ -45,6 +56,38 @@ public class DataSeeder implements CommandLineRunner {
 
         // repo save all the students
         repo.saveAll(students);
+
+        if(courseRepo.count() > 0) {
+            return;
+        }
+        // need a list of courses to save
+        List<Course> courses = List.of(
+                new Course(true, null, "Spring Boot Foundations", "SB101"),
+                new Course(true, null, "Spring Boot Advanced", "SB201"),
+                new Course(false, null, "Database", "DB200"),
+                new Course(true, null, "Java Foundations", "J101"),
+                new Course(false, null, "Data Structure Algorithm", "DSA")
+        );
+        System.out.println("Saving courses: " + courses);
+
+        // repo save all the courses
+        courseRepo.saveAll(courses);
+
+        if(enrollRepo.count() > 0) {
+            return;
+        }
+        // need a list of courses to save
+        List<Enrollment> enrollments = List.of(
+                new Enrollment(null, "69860bcd0bd58452c80c053e", "69860bcd0bd58452c80c0546", Instant.now(), "ACTIVE"),
+                new Enrollment(null, "69860bcd0bd58452c80c053f", "69860bcd0bd58452c80c0547", Instant.now(), "CANCELLED"),
+                new Enrollment(null, "69860bcd0bd58452c80c053f", "69860bcd0bd58452c80c0548", Instant.now(), "ACTIVE"),
+                new Enrollment(null, "69860bcd0bd58452c80c0540", "69860bcd0bd58452c80c0547", Instant.now(), "CANCELLED"),
+                new Enrollment(null, "69860bcd0bd58452c80c0541", "69860bcd0bd58452c80c0549", Instant.now(), "ACTIVE")
+        );
+        System.out.println("Saving enrollments: " + enrollments);
+
+        // repo save all the enrollments
+        enrollRepo.saveAll(enrollments);
     }
 }
 /*
