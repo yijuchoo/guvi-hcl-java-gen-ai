@@ -31,11 +31,12 @@ public class StudentPageResponseV2<T> {
         private int page;
         private int size;
         private long totalItems;
-        private long totalPages;
+        private int totalPages;
         private String sortBy;
         private String sortDir;
 
-        public Metadata(int page, int size, long totalItems, long totalPages, String sortBy, String sortDir) {
+        public Metadata(int page, int size, long totalItems, int totalPages, String sortBy,
+                        String sortDir) {
             this.page = page;
             this.size = size;
             this.totalItems = totalItems;
@@ -68,11 +69,11 @@ public class StudentPageResponseV2<T> {
             this.totalItems = totalItems;
         }
 
-        public long getTotalPages() {
+        public int getTotalPages() {
             return totalPages;
         }
 
-        public void setTotalPages(long totalPages) {
+        public void setTotalPages(int totalPages) {
             this.totalPages = totalPages;
         }
 

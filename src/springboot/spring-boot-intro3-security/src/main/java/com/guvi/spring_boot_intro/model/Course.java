@@ -6,46 +6,46 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "courses")
 public class Course {
-    @Id // _id
+
+    @Id // maps to MongoDB _id
     private String id;
+
     private String title;
+
     @Indexed(unique = true)
     private String code;
+
     private boolean active;
 
-    public Course(boolean active, String id, String title, String code) {
-        this.active = active;
+    public Course(String id, String title, String code, boolean active) {
         this.id = id;
         this.title = title;
         this.code = code;
+        this.active = active;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getTitle() {
         return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
     }
 
     public String getCode() {
         return code;
     }
 
-    public void setCode(String code) {
-        this.code = code;
-    }
-
     public boolean isActive() {
         return active;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public void setActive(boolean active) {

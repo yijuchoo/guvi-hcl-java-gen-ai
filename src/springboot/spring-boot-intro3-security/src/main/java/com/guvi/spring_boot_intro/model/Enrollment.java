@@ -1,17 +1,22 @@
 package com.guvi.spring_boot_intro.model;
 
+import java.time.Instant;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
-
 @Document(collection = "enrollments")
 public class Enrollment {
-    @Id // _id
+
+    @Id // maps to MongoDB _id
     private String id;
+
     private String studentId;
     private String courseId;
+
     private Instant enrolledAt;
+
+    // Example values: "ACTIVE", "CANCELLED"
     private String status;
 
     public Enrollment(String id, String studentId, String courseId, Instant enrolledAt, String status) {
@@ -26,36 +31,32 @@ public class Enrollment {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getStudentId() {
         return studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
     }
 
     public String getCourseId() {
         return courseId;
     }
 
-    public void setCourseId(String courseId) {
-        this.courseId = courseId;
-    }
-
     public Instant getEnrolledAt() {
         return enrolledAt;
     }
 
-    public void setEnrolledAt(Instant enrolledAt) {
-        this.enrolledAt = enrolledAt;
-    }
-
     public String getStatus() {
         return status;
+    }
+
+    public void setStudentId(String studentId) {
+        this.studentId = studentId;
+    }
+
+    public void setCourseId(String courseId) {
+        this.courseId = courseId;
+    }
+
+    public void setEnrolledAt(Instant enrolledAt) {
+        this.enrolledAt = enrolledAt;
     }
 
     public void setStatus(String status) {

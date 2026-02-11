@@ -9,7 +9,7 @@ public class CreateStudentRequest {
     private String name;
 
     @NotBlank(message = "email is required")
-    @Email(message = "email must be a valid email address") // checks for email format
+    @Email(message = "email must be a valid email address")
     private String email;
 
     public CreateStudentRequest() {}

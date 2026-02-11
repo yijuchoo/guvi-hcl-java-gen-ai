@@ -1,7 +1,5 @@
 package com.guvi.spring_boot_intro.model;
 
-import java.util.UUID;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,14 +11,14 @@ public class Student {
     // Getters
     // toString()
 
-    @Id
+    @Id // _id
     private String id;
     private String name;
 
     @Indexed(unique = true)
     private String email;
     private boolean active;
-
+// git commit -m "feat: Attendance service"
     public Student(String id, String name, String email, boolean active) {
         this.id = id;
         this.name = name;
